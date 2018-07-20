@@ -1,0 +1,131 @@
+from tkinter import *
+
+
+
+root = Tk()
+
+tasks = []
+
+
+def update_listbox():
+    # Clear the current list to keep from add the same tasks to the list over and over again
+    clear_listbox()
+    # Populate the Listbox
+    for task in tasks:
+        lb_tasks.insert("end", task)
+
+def clear_listbox():
+    lb_tasks.delete(0, "end")
+
+def get_data():
+    # Get the task to add
+    task = txt_input.get()
+    # Make sure the task is not empty
+    if task != "":
+        # Append to the list
+        tasks.append(task)
+        # Update the listbox
+        update_listbox()
+    else:
+        tkinter.messagebox.showwarning("Warning", "Please enter a task.")
+    txt_input.delete(0, "end") # clears the input box after a new task is entered
+
+def clear_all():
+    confirmed = tkinter.messagebox.askyesno("Please Confirm", "Do you really want to delete all?")
+    if confirmed == True:
+
+        global tasks
+
+        tasks = []
+        update_listbox()
+
+def rem_ove():
+
+    task = lb_tasks.get("active")
+
+    if task in tasks:
+        tasks.remove(task)
+
+    update_listbox()
+
+def asc_sort():
+
+    tasks.sort()
+    update_listbox()
+
+def dsc_sort():
+
+    tasks.sort()
+
+    tasks.reverse()
+
+    update_listbox()
+
+def choose_random():
+
+    task = random.choice(tasks)
+    lbl_display["text"] = task
+
+def task_number():
+
+    number_of_tasks = len(tasks)
+
+    msg = "Number of tasks: %s" % number_of_tasks
+
+    lbl_display["text"] = (msg)
+
+
+
+l1 = Label(root, text='add todo list')
+l1.grid(row=0, column=0)
+
+
+
+
+
+# define Entries
+title_text=StringVar()
+e1=Entry(root,textvariable=title_text)
+e1.grid(row=0, column=1)
+
+
+
+# define Listbox
+lstbox = Listbox(root, height=8, width=35)
+lstbox.grid(row=2, column=1, rowspan=6, columnspan=6)
+lstbox.bind('<Double-Button-1>')
+
+
+# add scrollbar to listbox
+sb = Scrollbar(root)
+sb.grid(row=3, column=7, rowspan=3)
+
+lstbox.configure(yscrollcommand=sb.set)
+sb.configure(command=lstbox.yview)
+
+# define Buttons
+b1 = Button(root, text='add', width=12,command=get_data)
+b1.grid(row=1, column=0)
+b1 = Button(root, text='clear all', width=12,command=clear_all)
+b1.grid(row=2, column=0)
+
+b1 = Button(root, text='remove', width=12,command=rem_ove)
+b1.grid(row=3, column=0)
+
+b1 = Button(root, text='assend sort', width=12,command=asc_sort)
+b1.grid(row=4, column=0)
+
+b1 = Button(root, text='desecent sort', width=12,command=dsc_sort)
+b1.grid(row=5, column=0)
+
+b1 = Button(root, text='choose random', width=12,command=choose_random)
+b1.grid(row=6, column=0)
+b1 = Button(root, text='number of task', width=12,command=task_number)
+b1.grid(row=7, column=0)
+b1 = Button(root, text='Close', width=12, command=root.destroy)
+b1.grid(row=8, column=0)
+
+
+root.resizable(False, False)
+
+root.mainloop()
